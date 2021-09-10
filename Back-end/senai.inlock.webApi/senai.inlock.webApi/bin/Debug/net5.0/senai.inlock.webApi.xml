@@ -32,37 +32,43 @@
             <param name="novoUsuario">Objeto usuario a ser cadastrado</param>
             <returns></returns>
         </member>
-        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepositorye.ListarTodos">
+        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepository.ListarTodos">
             <summary>
             Lista todos os estudios existentes
             </summary>
             <returns> Uma lista de estudio</returns>
         </member>
-        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepositorye.BuscarPorId(System.Int32)">
+        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepository.BuscarPorId(System.Int32)">
             <summary>
             Buscar um estudio atraves do id
             </summary>
             <param name="id"> Id do estudio a ser buscado</param>
             <returns> O estudio buscado</returns>
         </member>
-        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepositorye.Cadastrar(senai.inlock.webApi.Domains.EstudioDomain)">
+        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepository.Cadastrar(senai.inlock.webApi.Domains.EstudioDomain)">
             <summary>
             Cadastrar um novo estudio
             </summary>
             <param name="novoEstudio"> Estudio a ser cadastrado</param>
         </member>
-        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepositorye.AtualizarIdUrl(System.Int32,senai.inlock.webApi.Domains.EstudioDomain)">
+        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepository.AtualizarIdUrl(System.Int32,senai.inlock.webApi.Domains.EstudioDomain)">
             <summary>
             Atualizar um estudio atraves do id 
             </summary>
             <param name="id"> o id do estudio a ser atualizado</param>
             <param name="estudioAtualizado"> O estudio com os dados atualizados</param>
         </member>
-        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepositorye.Deletar(System.Int32)">
+        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepository.Deletar(System.Int32)">
             <summary>
             Delestar um estudio existente
             </summary>
             <param name="id"> id do estudio a ser deletado</param>
+        </member>
+        <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepository.ListarEmpresasEJogos">
+            <summary>
+            Lista os estudios e suas empresas
+            </summary>
+            <returns>Retorna a lista de empresas e seus jogos</returns>
         </member>
         <member name="M:senai.inlock.webApi.Interfaces.IJogoRepository.ListarTodos">
             <summary>

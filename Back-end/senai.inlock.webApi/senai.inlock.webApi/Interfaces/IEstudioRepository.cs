@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace senai.inlock.webApi.Interfaces
 {
-    interface IEstudioRepositorye
+    interface IEstudioRepository
     {
         /// <summary>
         /// Lista todos os estudios existentes
@@ -40,5 +40,11 @@ namespace senai.inlock.webApi.Interfaces
         /// </summary>
         /// <param name="id"> id do estudio a ser deletado</param>
         void Deletar(int id);
+
+        /// <summary>
+        /// Lista os estudios e suas empresas
+        /// </summary>
+        /// <returns>Retorna a lista de empresas e seus jogos</returns>
+        List<EstudioDomain> ListarEmpresasEJogos();
     }
 }

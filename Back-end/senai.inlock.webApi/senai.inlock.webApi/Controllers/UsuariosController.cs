@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using senai.inlock.webApi.Domains;
@@ -35,8 +36,42 @@ namespace senai.inlock.webApi.Controllers
             return Ok(listaUsuarios);
         }
 
+        /// <summary>
+        /// Cadastra  usuário Cliente
+        /// </summary>
+        /// <param name="novoUsuario">Objeto usuario a ser cadastrado</param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Post(UsuarioDomain novoUsuario)
+        {
+            if (novoUsuario.email == null || novoUsuario.senha == null || novoUsuario.idTipoUsuario <= 0)
+            {
+                return NotFound(
+                        new
+                        {
+                            mensagem = "Dados incompletos",
+                            erro = true
+                        }
+                    );
+            }
+
+            try
+            {
+                novoUsuario.idTipoUsuario = 1;
+
+                _usuarioRepository.Cadastrar(novoUsuario);
+
+                return StatusCode(201);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest(erro);
+            }
+        }
+
+        [Authorize(Roles ="ADMINISTRADOR")]
+        [HttpPost("admin")]
+        public IActionResult PostAdm(UsuarioDomain novoUsuario)
         {
             if (novoUsuario.email == null || novoUsuario.senha == null || novoUsuario.idTipoUsuario <= 0)
             {
@@ -96,7 +131,8 @@ namespace senai.inlock.webApi.Controllers
                 return BadRequest(erro);
             }
         }
-
+        
+        [Authorize(Roles ="ADMINISTRADOR")]
         [HttpPut("{id}")]
         public IActionResult UpdateByUrl(int id, UsuarioDomain usuarioAtualizado)
         {
@@ -139,6 +175,7 @@ namespace senai.inlock.webApi.Controllers
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -182,7 +219,7 @@ namespace senai.inlock.webApi.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Email, usuarioBuscado.email),
                 new Claim(JwtRegisteredClaimNames.Jti, usuarioBuscado.idUsuario.ToString()),
-                new Claim(ClaimTypes.Role, usuarioBuscado.idTipoUsuario.ToString()),
+                new Claim(ClaimTypes.Role, usuarioBuscado.TipoUsuario.titulo),
                 new Claim("Claim personalizada", "Amendoin")
             };
 

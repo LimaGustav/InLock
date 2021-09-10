@@ -10,6 +10,28 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:senai.inlock.webApi.Controllers.JogosController.UpdateByUrl(System.Int32,senai.inlock.webApi.Domains.JogoDomain)">
+            <summary>
+            Atualiza jogo Através do id
+            </summary>
+            <param name="id">Id do jogo a ser atualizado </param>
+            <param name="jogoAtualizado">Objeto jogo com dados atualizados</param>
+            <returns></returns>
+        </member>
+        <member name="M:senai.inlock.webApi.Controllers.JogosController.Delete(System.Int32)">
+            <summary>
+            Deleta um jogo cadastrado
+            </summary>
+            <param name="id">Id do jogo a ser deletado</param>
+            <returns></returns>
+        </member>
+        <member name="M:senai.inlock.webApi.Controllers.UsuariosController.Post(senai.inlock.webApi.Domains.UsuarioDomain)">
+            <summary>
+            Cadastra  usuário Cliente
+            </summary>
+            <param name="novoUsuario">Objeto usuario a ser cadastrado</param>
+            <returns></returns>
+        </member>
         <member name="M:senai.inlock.webApi.Interfaces.IEstudioRepositorye.ListarTodos">
             <summary>
             Lista todos os estudios existentes

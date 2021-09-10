@@ -15,12 +15,86 @@ namespace senai.inlock.webApi.Repository
 
         public void AtualizarIdUrl(int id, JogoDomain jogoAtualizado)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(stringConexao))
+            {
+                string queryUpdate = @"UPDATE JOGO
+                                        SET 
+	                                    nomeJogo = @nomeJogo, 
+	                                    descricao = @descricao,
+                                        dataLancamento = @dataLancamento,
+                                        valor = @valor,
+                                        idEstudio = @idEstudio
+                                    WHERE idJogo = @idJogo";
+
+                using (SqlCommand cmd = new SqlCommand(queryUpdate, con))
+                {
+                    cmd.Parameters.AddWithValue("@nomeJogo", jogoAtualizado.nomeJogo);
+
+                    cmd.Parameters.AddWithValue("@dataLancamento", jogoAtualizado.dataLancamento);
+
+                    cmd.Parameters.AddWithValue("@descricao", jogoAtualizado.descricao);
+
+                    cmd.Parameters.AddWithValue("@valor", jogoAtualizado.valor);
+
+                    cmd.Parameters.AddWithValue("@idEstudio", jogoAtualizado.idEstudio);
+
+                    cmd.Parameters.AddWithValue("@idJogo", id);
+
+                    con.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public JogoDomain BuscarPorId(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(stringConexao))
+            {
+                string querySelect = @"SELECT	idJogo,
+		                                        nomeJogo, 
+		                                        descricao, 
+		                                        dataLancamento, 
+		                                        valor, 
+		                                        J.idEstudio, 
+		                                        nomeEstudio 
+                                        FROM JOGO J
+                                        LEFT JOIN ESTUDIO E
+                                        ON J.idEstudio = E.idEstudio
+                                        WHERE J.idJogo = @idJogo";
+
+                using (SqlCommand cmd = new SqlCommand(querySelect, con))
+                {
+                    cmd.Parameters.AddWithValue("@idJogo", id);
+
+                    con.Open();
+
+                    SqlDataReader rdr;
+
+                    rdr = cmd.ExecuteReader();
+
+                    if (rdr.Read())
+                    {
+                        JogoDomain jogo = new JogoDomain()
+                        {
+                            idJogo = Convert.ToInt32(rdr["idJogo"]),
+                            nomeJogo = rdr["nomeJogo"].ToString(),
+                            descricao = rdr["descricao"].ToString(),
+                            dataLancamento = Convert.ToDateTime(rdr["dataLancamento"]),
+                            valor = Convert.ToSingle(rdr["valor"]),
+                            idEstudio = Convert.ToInt32(rdr["idEstudio"]),
+                            estudio = new EstudioDomain()
+                            {
+                                idEstudio = Convert.ToInt32(rdr["idEstudio"]),
+                                nomeEstudio = rdr["nomeEstudio"].ToString()
+                            }
+                        };
+
+                        return jogo;
+                    }
+                    return null;
+                }
+            }
         }
 
         public void Cadastrar(JogoDomain novoJogo)
@@ -55,11 +129,11 @@ namespace senai.inlock.webApi.Repository
 
         public void Deletar(int id)
         {
-            using(SqlConnection con = new SqlConnection(stringConexao))
+            using (SqlConnection con = new SqlConnection(stringConexao))
             {
                 string queryDelete = "DELETE FROM JOGO WHERE idJogo = @idJogo";
 
-                using(SqlCommand cmd = new SqlCommand(queryDelete, con))
+                using (SqlCommand cmd = new SqlCommand(queryDelete, con))
                 {
                     cmd.Parameters.AddWithValue("@idJogo", id);
 
@@ -74,7 +148,7 @@ namespace senai.inlock.webApi.Repository
         {
             List<JogoDomain> listaJogos = new List<JogoDomain>();
 
-            using(SqlConnection con = new SqlConnection(stringConexao))
+            using (SqlConnection con = new SqlConnection(stringConexao))
             {
                 string querySelect = @"SELECT	idJogo,
 		                                        nomeJogo, 
@@ -87,7 +161,7 @@ namespace senai.inlock.webApi.Repository
                                         LEFT JOIN ESTUDIO E
                                         ON J.idEstudio = E.idEstudio";
 
-                using(SqlCommand cmd = new SqlCommand(querySelect, con))
+                using (SqlCommand cmd = new SqlCommand(querySelect, con))
                 {
                     con.Open();
 

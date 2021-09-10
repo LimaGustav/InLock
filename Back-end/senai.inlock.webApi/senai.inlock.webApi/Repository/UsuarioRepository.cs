@@ -12,9 +12,10 @@ namespace senai.inlock.webApi.Repository
     {
 
         // Gustavo
-        //private string stringConexao = "Data Source=DESKTOP-8VJGUSR\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
+        private string stringConexao = "Data Source=DESKTOP-8VJGUSR\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
+
         //João
-        private string stringConexao = "Data Source=DESKTOP-L3Q203S\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
+        /*private string stringConexao = "Data Source=DESKTOP-L3Q203S\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";*/
         public void AtualizarIdUrl(int id, UsuarioDomain usuarioAtualizado)
         {
             using (SqlConnection con = new SqlConnection(stringConexao))

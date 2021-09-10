@@ -12,7 +12,9 @@ namespace senai.inlock.webApi.Repository
     {
 
         // Gustavo
-        private string stringConexao = "Data Source=DESKTOP-8VJGUSR\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
+        //private string stringConexao = "Data Source=DESKTOP-8VJGUSR\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
+        //João
+        private string stringConexao = "Data Source=DESKTOP-L3Q203S\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
         public void AtualizarIdUrl(int id, UsuarioDomain usuarioAtualizado)
         {
             using (SqlConnection con = new SqlConnection(stringConexao))
@@ -32,6 +34,56 @@ namespace senai.inlock.webApi.Repository
                     con.Open();
 
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public UsuarioDomain BuscarPorEmailSenha(string email, string senha)
+        {
+            using (SqlConnection con = new SqlConnection(stringConexao))
+            {
+                string querySelect = @"SELECT    idUsuario
+                                                 , email
+                                                , senha
+                                                , U.idTipoUsuario
+                                                , titulo
+                                                FROM USUARIO U
+                                                INNER JOIN TIPOUSUARIO T 
+                                                ON U.idTipoUsuario = T.idTipoUsuario
+                                                WHERE email = @email
+                                                and senha = @senha";
+
+                using (SqlCommand cmd = new SqlCommand(querySelect,con))
+                {
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@senha", senha);
+
+                    con.Open();
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    //caso os dados tenham sido obtidos
+                    if (rdr.Read())
+                    {
+                        //cria um objeto do tipo UsuarioDomain
+                        UsuarioDomain usuarioBuscado = new UsuarioDomain
+                        {
+                            //atribui às propriedades os valores das colunas do banco de dados
+                            idUsuario = Convert.ToInt32(rdr["idUsuario"]),
+                            email = rdr["email"].ToString(),
+                            senha = rdr["senha"].ToString(),
+                            idTipoUsuario = Convert.ToInt32(rdr["idTipoUsuario"]),
+                            TipoUsuario = new TipoUsuarioDomain()
+                            {
+                                idTipoUsuario = Convert.ToInt32(rdr["idTipoUsuario"]),
+                                titulo = rdr["titulo"].ToString()
+                            }
+                            
+                        };
+                        return usuarioBuscado;
+
+                    }
+                    return null;
                 }
             }
         }

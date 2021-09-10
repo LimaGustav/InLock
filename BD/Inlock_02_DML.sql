@@ -16,7 +16,7 @@ VALUES	('Blizzard'),
 		('Square Enix')
 GO
 
-INSERT INTO JOGO (nomeJogo,descrição,dataLancamento,valor,idEstudio)
+INSERT INTO JOGO (nomeJogo,descricao,dataLancamento,valor,idEstudio)
 VALUES	('Diablo 3',
 		'é um jogo que contém bastante ação e é viciante, seja você um novato ou um fã.',
 		'15-5-2012',

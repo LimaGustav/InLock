@@ -57,5 +57,110 @@ namespace senai.inlock.webApi.Controllers
                 return BadRequest(erro);
             }
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound(
+                        new
+                        {
+                            mensagem = "Id inválido",
+                            erro = true
+                        }
+                    );
+            }
+
+            try
+            {
+                UsuarioDomain usuarioBuscado = _usuarioRepository.BuscarPorId(id);
+
+                if (usuarioBuscado == null)
+                {
+                    return NotFound(
+                            new
+                            {
+                                mensagem = "Usuário não encontrado"
+                            }
+                        );
+                }
+
+                return Ok(usuarioBuscado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest(erro);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateByUrl(int id, UsuarioDomain usuarioAtualizado)
+        {
+            if (id <= 0)
+            {
+                return NotFound(
+                        new
+                        {
+                            mensagem = "Id inválido",
+                            erro = true
+                        }
+                    );
+            }
+
+            UsuarioDomain usuarioBuscado = _usuarioRepository.BuscarPorId(id);
+
+            if (usuarioBuscado == null)
+            {
+                return NotFound(
+                        new
+                        {
+                            mensagem = "Usuário não encontrado"
+                        }
+                    );
+            }
+
+            try
+            {
+                if (usuarioAtualizado.senha == null) usuarioAtualizado.senha = usuarioBuscado.senha;
+
+                if (usuarioAtualizado.idTipoUsuario == 0) usuarioAtualizado.idTipoUsuario = usuarioBuscado.idTipoUsuario;
+
+                _usuarioRepository.AtualizarIdUrl(id, usuarioAtualizado);
+
+                return NoContent();
+            }
+            catch (Exception erro)
+            {
+                return BadRequest(erro);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound(
+                        new
+                        {
+                            mensagem = "Id inválido",
+                            erro = true
+                        }
+                    );
+            }
+
+            try
+            {
+                _usuarioRepository.Deletar(id);
+
+                return NoContent();
+            }
+            catch (Exception erro)
+            {
+                return BadRequest(erro);
+            }
+        }
+            
     }
 }

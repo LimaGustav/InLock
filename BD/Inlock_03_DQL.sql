@@ -38,13 +38,11 @@ WHERE idEstudio = 3
 GO
 
 
-SELECT	idJogo,
-		nomeJogo, 
-		descricao, 
-		dataLancamento, 
-		valor, 
-		J.idEstudio, 
-		nomeEstudio 
-FROM JOGO J
-LEFT JOIN ESTUDIO E
-ON J.idEstudio = E.idEstudio
+SELECT	idUsuario, 
+		email, 
+		ISNULL(senha,'Dados sensível') senha,
+		U.idTipoUsuario, 
+		titulo 
+FROM USUARIO U
+LEFT JOIN TIPOUSUARIO T
+ON U.idTipoUsuario = T.idTipoUsuario

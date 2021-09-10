@@ -15,12 +15,68 @@ namespace senai.inlock.webApi.Repository
         private string stringConexao = "Data Source=DESKTOP-8VJGUSR\\SQLEXPRESS; initial catalog=inlock_games_tarde; user Id=sa; pwd=senai@132";
         public void AtualizarIdUrl(int id, UsuarioDomain usuarioAtualizado)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(stringConexao))
+            {
+                string queryUpdate = @"UPDATE USUARIO
+                                    SET 
+	                                    senha = @senha, 
+	                                    idTipoUsuario = @idTipoUsuario
+                                    WHERE idUsuario = @idUsuario";
+
+                using (SqlCommand cmd = new SqlCommand(queryUpdate, con))
+                {
+                    cmd.Parameters.AddWithValue("@senha", usuarioAtualizado.senha);
+                    cmd.Parameters.AddWithValue("@idTipoUsuario", usuarioAtualizado.idTipoUsuario);
+                    cmd.Parameters.AddWithValue("@idUsuario", id);
+
+                    con.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public UsuarioDomain BuscarPorId(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(stringConexao))
+            {
+                string querySelect = @"SELECT	idUsuario, 
+		                                            email, 
+		                                            U.idTipoUsuario, 
+		                                            titulo 
+                                            FROM USUARIO U
+                                            LEFT JOIN TIPOUSUARIO T
+                                            ON U.idTipoUsuario = T.idTipoUsuario
+                                            WHERE idUsuario = @idUsuario";
+
+                using (SqlCommand cmd = new SqlCommand(querySelect, con))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", id);
+
+                    con.Open();
+
+                    SqlDataReader rdr;
+
+                    rdr = cmd.ExecuteReader();
+
+                    if (rdr.Read())
+                    {
+                        UsuarioDomain usuario = new UsuarioDomain()
+                        {
+                            idUsuario = Convert.ToInt32(rdr["idUsuario"]),
+                            email = rdr["email"].ToString(),
+                            idTipoUsuario = Convert.ToInt32(rdr["idTipoUsuario"]),
+                            TipoUsuario = new TipoUsuarioDomain()
+                            {
+                                idTipoUsuario = Convert.ToInt32(rdr["idTipoUsuario"]),
+                                titulo = rdr["titulo"].ToString()
+                            }
+                        };
+                        return usuario;
+                    }
+                    return null;
+                }
+            }
         }
 
         public void Cadastrar(UsuarioDomain novoUsuario)
@@ -47,6 +103,15 @@ namespace senai.inlock.webApi.Repository
             using (SqlConnection con = new SqlConnection(stringConexao))
             {
                 string queryDelete = "DELETE FROM USUARIO WHERE idUsuario = @idUsuario";
+
+                using (SqlCommand cmd = new SqlCommand(queryDelete, con))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", id);
+
+                    con.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
